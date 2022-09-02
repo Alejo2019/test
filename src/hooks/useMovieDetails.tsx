@@ -1,35 +1,30 @@
 import { useEffect, useState } from 'react'
 import movieDB from '../api/movieDB';
-import { MovieFull } from '../interfaces/movieInterface';
-import { CreditsResponse, Cast } from '../interfaces/creditsInterface';
+import { Item } from '../interfaces/movieInterface';
 
 interface MovieDetails {
     isLoading: boolean;
-    movieFull?: MovieFull;
-    cast: Cast[];
+    bookFull?: Item;
 }
 
 
-export const useMovieDetails = ( movieId: number ) => {
+export const useMovieDetails = ( bookId: number ) => {
 
     const [state, setState] = useState<MovieDetails>({
         isLoading: true,
-        movieFull: undefined,
-        cast: []
+        bookFull: undefined,
     });
 
 
     const getMovieDetails = async() => {
 
-        const movieDetailsPromise = movieDB.get<MovieFull>(`/${ movieId }`);
-        const castPromise = movieDB.get<CreditsResponse>(`/${ movieId }/credits`);
+        const bookDetailsPromise = movieDB.get<Item>(`/${ bookId }`);
 
-        const [ movieDetailsResp, castPromiseResp ] = await Promise.all([ movieDetailsPromise, castPromise ]);
+        const [ bookDetailsResp ] = await Promise.all([ bookDetailsPromise ]);
 
         setState({
             isLoading: false,
-            movieFull: movieDetailsResp.data,
-            cast: castPromiseResp.data.cast
+            bookFull: bookDetailsResp.data
         })
     }
 
