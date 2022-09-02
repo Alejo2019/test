@@ -23,13 +23,14 @@ export const MoviePoster = ({movie}: Props) => {
         height: 200,
         marginHorizontal: 2,
         paddingBottom: 20,
+        paddingTop: 20,
         paddingHorizontal: 7,
       }}>
       <View style={styles.imageContainer}>
         <Image source={{uri}} style={styles.image} />
       </View>
       <Text style={styles.tittle}>{movie.volumeInfo.title}</Text>
-      <Text>{movie.volumeInfo.authors}</Text>
+      <Text style={styles.subTittle} >{movie.volumeInfo.authors}</Text>
     </TouchableOpacity>
   );
 };
@@ -60,5 +61,11 @@ const styles = StyleSheet.create({
   },
   tittle: {
     top: 10,
+   textAlign: 'center',
+    color: '#9A9A9A',
+  },
+  subTittle: {
+    top: 15,
+   textAlign: 'center',
   },
 });

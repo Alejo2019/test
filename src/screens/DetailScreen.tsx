@@ -6,14 +6,17 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  ActivityIndicator,
+  TextInput,
+  Button,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {RootStackParams} from '../navigation/Navigation';
-
-import {useMovieDetails} from '../hooks/useMovieDetails';
-import {MovieDetails} from '../components/MovieDetails';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -22,11 +25,28 @@ interface Props extends StackScreenProps<RootStackParams, 'DetailScreen'> {}
 export const DetailScreen = ({route, navigation}: Props) => {
   const movie = route.params;
   const uri = `${movie.volumeInfo.imageLinks.smallThumbnail}`;
+  const [userName, setUsername] = useState('');
+  const [reseña, setReseña] = useState('');
 
-  //const { isLoading,bookFull } = useMovieDetails(sta);
-
+  console.log(userName)
+  const saveData = async () => {
+    try {
+      await AsyncStorage.setItem("",(userName));
+      await AsyncStorage.setItem("",(reseña));
+      console.log(userName);
+      console.log(reseña)
+      Alert.alert("Data successfully saved");
+    } catch (e) {
+      Alert.alert("Failed to save the data to the storage");
+    }
+  };
   return (
     <ScrollView>
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={60}
+        behavior={
+          Platform.OS === 'ios' ? 'position' : 'padding'
+        }></KeyboardAvoidingView>
       <View style={styles.imageContainer}>
         <View style={styles.imageBorder}>
           <Image source={{uri}} style={styles.posterImage} />
@@ -34,16 +54,38 @@ export const DetailScreen = ({route, navigation}: Props) => {
       </View>
 
       <View style={styles.marginContainer}>
-        <Text style={styles.subTitle}>{movie.volumeInfo.title}</Text>
-        <Text style={styles.subTitle}>{movie.volumeInfo.authors}</Text>
-        <Text style={styles.subTitle}>{movie.volumeInfo.description}</Text>
+        <Text style={styles.tittle}>{movie.volumeInfo.title}</Text>
+        <Text style={styles.subTittle}>{movie.volumeInfo.authors}</Text>
+        <Text style={styles.description}>{movie.volumeInfo.description}</Text>
       </View>
 
-      {/* {
-                isLoading 
-                    ? <ActivityIndicator size={ 35 } color="grey" style={{ marginTop: 20 }} />
-                    : <MovieDetails bookFull={ bookFull! } />
-            } */}
+      {reseña ? null : <View>
+        <Text>{userName}</Text>
+        </View>}
+
+      <View>
+        <Text style={styles.reseña}>Escribe una reseña</Text>
+        <Text style={styles.username}>Nombre de usuario</Text>
+        <TextInput
+          style={styles.input}
+          value={userName}
+          onChangeText={(text: string) => setUsername(text)}
+        />
+        <Text style={styles.username}>Reseña</Text>
+        <TextInput
+          style={styles.input}
+          value={reseña}
+          onChangeText={(text: string) => setReseña(text)}
+        />
+      </View>
+
+      <View style={styles.fixToText}>
+        <Button
+        
+          title="Right button"
+          onPress={saveData}
+        />
+      </View>
 
       {/* Boton para cerrar */}
       <View style={styles.backButton}>
@@ -59,7 +101,9 @@ const styles = StyleSheet.create({
   imageContainer: {
     // backgroundColor: 'red',
     // overflow: 'hidden',
-    width: '100%',
+    width: '50%',
+    margin:30,
+    left: 70 ,
     height: screenHeight * 0.4,
     shadowColor: '#000',
     shadowOffset: {
@@ -95,11 +139,15 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     alignContent: 'center',
     justifyContent: 'center',
-    marginLeft: 10
+    marginLeft: 10,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  tittle: {
+   textAlign: 'center',
+    color: '#9A9A9A',
+  },
+  subTittle: {
+    top: 10,
+   textAlign: 'center',
   },
   backButton: {
     position: 'absolute',
@@ -107,5 +155,37 @@ const styles = StyleSheet.create({
     elevation: 9,
     top: 30,
     left: 5,
+    color: '#0a0a0a' ,
   },
+  input: {
+    top: 10,
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    borderRadius: 5,
+
+    //padding: 10,
+  },
+  fixToText: {
+    top:15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignContent: 'flex-end',
+    left: 250,
+    marginBottom:50
+  },
+  description:{
+    alignItems: 'center',
+    top: 15,
+    margin: 10,
+    justifyContent: 'center'
+  },
+  reseña:{
+    left:25,
+    fontSize: 20
+  },
+  username:{
+    left: 25,
+    top:15
+  }
 });
