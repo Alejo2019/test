@@ -3,8 +3,7 @@ import { FlatList, Text, View } from 'react-native';
 import currencyFormatter from 'currency-formatter';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Item } from '../interfaces/movieInterface';
-import { Cast } from '../interfaces/creditsInterface';
-import { CastItem } from './CastItem';
+
 
 interface Props {
     bookFull: Item;

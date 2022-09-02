@@ -11,8 +11,6 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MoviePoster} from '../components/MoviePoster';
 import {useMovies} from '../hooks/useMovies';
 
-const {width: windowWidth} = Dimensions.get('window');
-
 export const HomeScreen = () => {
   const {nowPlaying, isLoading} = useMovies();
   const {top} = useSafeAreaInsets();
