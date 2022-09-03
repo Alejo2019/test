@@ -6,6 +6,7 @@ import {
   ScrollView,
   FlatList,
   Text,
+  TextInput,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {MoviePoster} from '../components/MoviePoster';
@@ -28,6 +29,16 @@ export const HomeScreen = () => {
     <View style={{marginTop: top + 20}}>
       {/* Carosel Principal */}
       <View style={{height: '100%'}}>
+      <Text
+            style={{
+              top: top + 20,
+              marginBottom: top + 60,
+              paddingBottom: 10,
+              fontSize: 28,
+              left: 125,
+            }}>
+            Bookshelves{' '}
+          </Text>
         <FlatList
           data={nowPlaying}
           renderItem={({item}: any) => <MoviePoster movie={item} />}
@@ -36,16 +47,21 @@ export const HomeScreen = () => {
           //inactiveSlideOpacity={0.9}
 
           ListHeaderComponent={
-            <Text
-              style={{
-                top: top + 20,
-                marginBottom: top + 60,
-                paddingBottom: 10,
-                fontSize: 28,
-                left: 125,
-              }}>
-              Bookshelves{' '}
-            </Text>
+
+            <TextInput
+            placeholderTextColor="black"
+            placeholder='Buscar pelicula'
+            style={{
+                height: 40, borderColor: 'gray', borderWidth: 1, fontSize: 15, marginHorizontal: 15,
+                marginBottom: 5,
+                paddingHorizontal: 15,
+                borderBottomColor: '#000',
+                flex: 1,
+                borderRadius: 15,
+                shadowColor: "#000",
+            }}
+        />
+            
           }
         />
       </View>
